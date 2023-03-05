@@ -11,15 +11,15 @@ class Profile(models.Model):
         return f'{self.user.username} Profile'
     
     # Override the save method
-    def save(self):
-        super().save()
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
 
-        # Open image
-        img = Image.open(self.image.path)
+    #     # Open image
+    #     img = Image.open(self.image.path)
 
-        # Check if current image height or width is more than 300px
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            # Resize image
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+    #     # Check if current image height or width is more than 300px
+    #     if img.height > 300 or img.width > 300:
+    #         output_size = (300, 300)
+    #         # Resize image
+    #         img.thumbnail(output_size)
+    #         img.save(self.image.path)

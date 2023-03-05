@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import boto3
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'crispy_forms',
     'crispy_bootstrap5',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -142,7 +144,6 @@ LOGIN_REDIRECT_URL = 'blog-home'
 # Login url
 LOGIN_URL = 'login'
 
-import inspect
 
 # Load environment variables from .env file
 load_dotenv()
@@ -154,4 +155,30 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('USER_EMAIL')
 EMAIL_HOST_PASSWORD = os.environ.get('PASS_EMAIL')
 
-print(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
+# print(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
+
+
+# AWS
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_SECRET_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = 'us-east-2'
+AWS_S3_ADDRESSING_STYLE = 'virtual'
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Session
+session = boto3.Session(
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    region_name=AWS_S3_REGION_NAME
+)
+
+# print(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+
+# Set the default storage class for static files
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
